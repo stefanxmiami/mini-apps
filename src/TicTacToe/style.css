@@ -1,0 +1,95 @@
+.status {
+    font-family: "Roboto Black";
+    font-size: 46px;
+    color: white;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.tic-tac-toe-game-info {
+    width: 45%;
+}
+
+.tic-tac-toe-game-info li {
+    list-style: none;
+}
+
+.tic-tac-toe-game-info li:first-child button{
+    background-color: crimson;
+}
+
+.tic-tac-toe-game-info button {
+    background-color: #222;
+    padding: 5px;
+    margin: 2px;
+}
+
+.tic-tac-toe-game-full {
+    margin-top: 60px;
+    display: flex;
+}
+
+.tic-tac-toe-game {
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    width: 55%;
+}
+
+.tic-tac-toe-game-result {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.tic-tac-toe-game-result button {
+    font-size: 32px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #222;
+    color: #fff;
+}
+
+.tic-tac-toe-game-result button:hover {
+    background-color: #444;
+}
+
+.board-row {
+    display: flex;
+}
+
+.tic-tac-toe-game-board {
+    background-color: #333;
+    border-radius: 10px;
+    padding: 30px;
+    margin-left: auto;
+    height: 520px;
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+    font-size: 60px;
+    font-weight: bold;
+    line-height: 80px;
+    text-align: center;
+    border: 2px solid #222;
+    outline: none;
+    cursor: pointer;
+    user-select: none;
+    margin: 5px;
+    background-color: #222;
+}
+
+.square.X {
+    color: #f00;
+}
+
+.square.O {
+    color: #00f;
+}
+
+.tic-tac-toe-game-info {
+    margin-left: 20px;
+}

@@ -1,0 +1,143 @@
+.todo-list {
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+form button {
+    width: 30%;
+    background-color: #222;
+}
+
+ul {
+    margin: 16px;
+    padding: 0;
+}
+
+.todo-input {
+    width: 31%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.todo-item {
+    display: flex;
+    background-color: #333;
+    width: 100%;
+    color: white;
+    list-style: none;
+    padding: 20px;
+}
+
+.todo-item li {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    justify-content: space-between;
+}
+
+.todo-item:first-child {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.todo-item:last-child {
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.todo-item input[type='checkbox'] {
+    margin-right: 0.5rem;
+}
+
+.todo-item .time-remaining {
+    margin-right: 0.5rem;
+    font-size: 0.8rem;
+    color: gray;
+}
+
+.todo-item .overdue {
+    color: red;
+}
+
+.todo-item button {
+    margin-left: 0.5rem;
+    border: none;
+    background-color: #222;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.edit-button {
+    color: yellow;
+}
+
+.delete-button {
+    color: red;
+}
+
+.todo-item button:hover {
+    text-decoration: underline;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.check-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+    max-width: 80px;
+    min-width: 80px;
+    text-align: center;
+    background-color: #222;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.remaining-time {
+    font-size: 16px;
+}
+
+.todo-item .buttons {
+    margin-left: 5px;
+}
+
+.left-content {
+    display: flex;
+}
+
+.buttons {
+    margin-left: 0;
+}
+
+.todo-item form input {
+    margin: auto 0;
+    height: 50px;
+    width: 60%;
+}
+.todo-text {
+    margin: auto 10px;
+}
+

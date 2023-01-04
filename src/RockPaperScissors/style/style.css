@@ -1,0 +1,91 @@
+.rps-game {
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 10px;
+}
+
+.choices button {
+    height: 100px;
+    width: 100px;
+    border: none;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-size: 3em;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.choices button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rock {
+    background-image: url('../img/rock.png');
+    background-size: cover;
+    color: transparent;
+}
+
+.paper {
+    background-image: url('../img/paper.png');
+    background-size: cover;
+    color: transparent;
+}
+
+.scissors {
+    background-image: url('../img/scissors.png');
+    background-size: cover;
+    color: transparent;
+}
+
+.rps-game .result {
+    font-size: 3em;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
+.player-choice,
+.computer-choice {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.player-choice {
+    background-color: blue;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.computer-choice {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+button {
+    height: 50px;
+    width: 150px;
+    border: none;
+    background-color: #333;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    font-size: 1em;
+    cursor: pointer;
+    margin: 20px 0;
+}
