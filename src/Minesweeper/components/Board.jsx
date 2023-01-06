@@ -3,9 +3,9 @@ import Cell from './Cell';
 import { CELL_STATES } from './CELL_STATES';
 import '../style/style.css'
 
-const Board = ({ board, onCellClick, onCellRightClick }) => {
+const Board = ({ board, onCellClick, onCellRightClick, rows, cols }) => {
     return (
-        <div className="board">
+        <div className="board"/* style={{ width: `${30 * cols}px`, height: `${30 * rows}px` }}*/>
             {board.map((row, i) =>
                 row.map((cell, j) => (
                     <div

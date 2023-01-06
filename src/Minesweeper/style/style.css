@@ -14,6 +14,13 @@
     margin-bottom: 20px;
 }
 
+.board {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid #ccc;
+    background-color: #eee;
+}
+
 .board-size-options {
     display: flex;
     align-items: center;

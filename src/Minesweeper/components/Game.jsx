@@ -14,8 +14,19 @@ const GameStates = {
 
 const Game = ({rows, cols, mines, onNewGame}) => {
     const [gameState, setGameState] = useState(GameStates.IN_PROGRESS);
-    const [flagsRemaining, setFlagsRemaining] = useState(mines);
     const [timeElapsed, setTimeElapsed] = useState(0);
+
+    const [flagsRemaining, setFlagsRemaining] = useState(mines);
+    const hasCoveredCells = () => {
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (board[i][j].state === CELL_STATES.COVERED) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -25,32 +36,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
         return () => clearInterval(intervalId);
     }, []);
 
-    const createBoard = (rows, cols, mines) => {
-        // Create the board as a 2D array of cells
-        const board = [];
-        for (let i = 0; i < rows; i++) {
-            const row = [];
-            for (let j = 0; j < cols; j++) {
-                row.push({state: CELL_STATES.COVERED});
-            }
-            board.push(row);
-        }
-
-        // Place the mines randomly on the board
-        for (let i = 0; i < mines; i++) {
-            // Choose a random cell to place the mine
-            const row = Math.floor(Math.random() * rows);
-            const col = Math.floor(Math.random() * cols);
-
-            // Make sure the cell doesn't already have a mine
-            if (board[row][col].hasMine) {
-                i--;
-                continue;
-            }
-
-            board[row][col].hasMine = true;
-        }
-        // Calculate the number of mines in each cell's neighbors
+    function calculateNumOfAdjacentMines(rows, cols, board) {
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 let numNeighboringMines = 0;
@@ -72,12 +58,70 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                 board[i][j].numFlaggedNeighbors = 0;
             }
         }
+    }
+
+    function placeMinesOnBoard(mines, rows, cols, board) {
+        for (let i = 0; i < mines; i++) {
+            // Choose a random cell to place the mine
+            const row = Math.floor(Math.random() * rows);
+            const col = Math.floor(Math.random() * cols);
+
+            // Make sure the cell doesn't already have a mine
+            if (board[row][col].hasMine) {
+                i--;
+                continue;
+            }
+
+            board[row][col].hasMine = true;
+        }
+    }
+
+    const createBoard = (rows, cols, mines) => {
+        // Create the board as a 2D array of cells
+        const board = [];
+        for (let i = 0; i < rows; i++) {
+            const row = [];
+            for (let j = 0; j < cols; j++) {
+                row.push({state: CELL_STATES.COVERED});
+            }
+            board.push(row);
+        }
+
+        // Place the mines randomly on the board
+        placeMinesOnBoard(mines, rows, cols, board);
+        // Calculate the number of mines in each cell's neighbors
+        calculateNumOfAdjacentMines(rows, cols, board);
 
         return board;
     };
 
+    const revealCell = (row, col) => {
+        if (board[row][col].state !== CELL_STATES.COVERED) {
+            return;
+        }
+        board[row][col].state = CELL_STATES.REVEALED;
+        if (board[row][col].numNeighboringMines === 0) {
+            for (let ii = -1; ii <= 1; ii++) {
+                for (let jj = -1; jj <= 1; jj++) {
+                    if (ii === 0 && jj === 0) {
+                        continue;
+                    }
+                    const rowToCheck = row + ii;
+                    const colToCheck = col + jj;
+                    if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
+                        revealCell(rowToCheck, colToCheck);
+                    }
+                }
+            }
+        }
+    };
+
     const handleCellClick = (row, col) => {
         console.log(`Clicked on cell: ${row},${col}`);
+        if (board[row][col].state === CELL_STATES.FLAGGED) {
+            return; // Disallow clicking on flagged cells
+        }
+
         if (board[row][col].hasMine) {
             setGameState(GameStates.LOST);
         } else {
@@ -97,51 +141,30 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                         }
                     }
                 }
-                if (!allNeighboringBombsFlagged) {
-                    break;
+                if (allNeighboringBombsFlagged) {
+                    revealCell(row, col);
+                    revealEmptyCells(row, col);
+                    if (!hasCoveredCells()) {
+                        setGameState(GameStates.WON);
+                    }
+                } else {
+                    // Otherwise, just reveal the clicked cell
+                    board[row][col].state = CELL_STATES.REVEALED;
+                    expandEmptyCells(board, row, col)
                 }
             }
+
             if (allNeighboringBombsFlagged) {
                 // Reveal this cell and all of its neighboring cells
-                board[row][col].state = CELL_STATES.REVEALED;
-                for (let ii = -1; ii <= 1; ii++) {
-                    for (let jj = -1; jj <= 1; jj++) {
-                        if (ii === 0 && jj === 0) {
-                            continue;
-                        }
-                        const rowToCheck = row + ii;
-                        const colToCheck = col + jj;
-                        if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
-                            if (board[rowToCheck][colToCheck].state !== CELL_STATES.FLAGGED) {
-                                board[rowToCheck][colToCheck].state = CELL_STATES.REVEALED;
-                            }
-                        }
-                    }
-                }
+                revealCurrentAndNeighboringCells();
             } else {
                 board[row][col].state = CELL_STATES.REVEALED;
             }
             setBoard([...board]);
         }
-    };
 
-    const expandEmptyCells = (board, row, col) => {
-        // Base case: if the cell is out of bounds or has already been revealed, return
-        if (
-            row < 0 ||
-            row >= board.length ||
-            col < 0 ||
-            col >= board[0].length ||
-            board[row][col].state === CELL_STATES.REVEALED
-        ) {
-            return;
-        }
-
-        // Reveal the cell
-        board[row][col].state = CELL_STATES.REVEALED;
-
-        // If the cell doesn't have any neighboring mines, expand to its neighbors
-        if (board[row][col].numNeighboringMines === 0) {
+        function revealCurrentAndNeighboringCells() {
+            board[row][col].state = CELL_STATES.REVEALED;
             for (let ii = -1; ii <= 1; ii++) {
                 for (let jj = -1; jj <= 1; jj++) {
                     if (ii === 0 && jj === 0) {
@@ -149,7 +172,54 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                     }
                     const rowToCheck = row + ii;
                     const colToCheck = col + jj;
-                    expandEmptyCells(board, rowToCheck, colToCheck);
+                    if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
+                        if (board[rowToCheck][colToCheck].state !== CELL_STATES.FLAGGED) {
+                            console.log(`cell: ${row},${col} is getting revealed`);
+                            board[rowToCheck][colToCheck].state = CELL_STATES.REVEALED;
+                        }
+                    }
+                }
+            }
+        }
+        if (!hasCoveredCells()) {
+            setGameState(GameStates.WON);
+        }
+    };
+
+    const expandEmptyCells = (board, row, col) => {
+        if (row < 0 || row >= rows || col < 0 || col >= cols) {
+            return;
+        }
+        if (board[row][col].state !== CELL_STATES.COVERED) {
+            return;
+        }
+        board[row][col].state = CELL_STATES.REVEALED;
+        if (board[row][col].numNeighboringMines > 0) {
+            return;
+        }
+
+        for (let ii = -1; ii <= 1; ii++) {
+            for (let jj = -1; jj <= 1; jj++) {
+                if (ii === 0 && jj === 0) {
+                    continue;
+                }
+                const rowToCheck = row + ii;
+                const colToCheck = col + jj;
+                expandEmptyCells(board, rowToCheck, colToCheck);
+            }
+        }
+    };
+
+    const revealEmptyCells = (row, col) => {
+        for (let ii = -1; ii <= 1; ii++) {
+            for (let jj = -1; jj <= 1; jj++) {
+                if (ii === 0 && jj === 0) {
+                    continue;
+                }
+                const rowToCheck = row + ii;
+                const colToCheck = col + jj;
+                if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
+                    revealCell(rowToCheck, colToCheck);
                 }
             }
         }
@@ -157,6 +227,13 @@ const Game = ({rows, cols, mines, onNewGame}) => {
 
     const handleCellRightClick = (row, col) => {
         console.log(`Right clicked on cell: ${row},${col}`);
+        if (board[row][col].state === CELL_STATES.FLAGGED) {
+            setFlagsRemaining(flagsRemaining + 1);
+        }
+        // Return early if the cell is revealed
+        if (board[row][col].state === CELL_STATES.REVEALED) {
+            return;
+        }
         if (board[row][col].state === CELL_STATES.FLAGGED) {
             board[row][col].state = CELL_STATES.COVERED;
             for (let ii = -1; ii <= 1; ii++) {
@@ -188,6 +265,9 @@ const Game = ({rows, cols, mines, onNewGame}) => {
             }
         }
         setBoard([...board]);
+        if (!hasCoveredCells()) {
+            setGameState(GameStates.WON);
+        }
     };
 
     const [board, setBoard] = useState(createBoard(rows, cols, mines));

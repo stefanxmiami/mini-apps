@@ -30,6 +30,12 @@ const MainMenu = () => {
         setShowGame(true);
     };
 
+    const reset = () => {
+        setShowGame(false);
+        setBoardSizeIndex(0);
+        setBoardSize(BOARD_SIZES[0]);
+    }
+
     const onBoardSizeChange = (e) => {
         const index = e.target.value;
         setBoardSize(BOARD_SIZES[index]);
