@@ -330,7 +330,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
             {gameState === GameStates.WON && (
                 <Modal>
                     <h1>You won!</h1>
-                    <button onClick={onNewGame}>New game</button>
+                    <button onClick={startNewGame}>New game</button>
                 </Modal>
             )}
             {gameState === GameStates.LOST && (

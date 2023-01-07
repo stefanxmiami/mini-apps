@@ -1,0 +1,25 @@
+.menu-items {
+    /* Style the menu items */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    /* Position the menu items to the right side of the screen */
+    position: absolute;
+    top: 60px;
+    right: 0;
+    /* Add some padding and background color */
+    padding: 10px;
+    background-color: #4b5563;
+    /* Add a box shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.menu-item {
+    /* Style each menu item */
+    margin: 0;
+    padding: 10px;
+    /* Add a hover effect */
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+}

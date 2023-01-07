@@ -20,33 +20,35 @@ function AnalogClock(props) {
     const second = date.getSeconds() * 6 + 180; // // 360/60 = 6 each minutes it rotate 6deg + 180(look at 0 deg for more clarification)
 
     return (
-        <div className='clock-container'>
-            <div className="analong-clock-container">
-                <div className="clock">
-                    <div
-                        className="hour-hand"
-                        style={{
-                            transform: 'rotate(' + hour + 'deg)'
-                        }}
-                    />
-                    <div
-                        className="minute-hand"
-                        style={{
-                            transform: 'rotate(' + minute + 'deg)'
-                        }}
-                    />
-                    <div
-                        className="second-hand"
-                        style={{
-                            transform: 'rotate(' + second + 'deg)'
-                        }}
-                    />
-                    <div className="brand"/>
+        <div className='clock-background'>
+            <img src={ram}/>
+            <div className='clock-container'>
+                <div className="analong-clock-container">
+                    <div className="clock">
+                        <div
+                            className="hour-hand"
+                            style={{
+                                transform: 'rotate(' + hour + 'deg)'
+                            }}
+                        />
+                        <div
+                            className="minute-hand"
+                            style={{
+                                transform: 'rotate(' + minute + 'deg)'
+                            }}
+                        />
+                        <div
+                            className="second-hand"
+                            style={{
+                                transform: 'rotate(' + second + 'deg)'
+                            }}
+                        />
+                        <div className="brand"/>
+                    </div>
                 </div>
             </div>
         </div>
-    )
-        ;
+    );
 }
 
 export default AnalogClock;

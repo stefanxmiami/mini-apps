@@ -1,6 +1,7 @@
 .wrapper {
-    width: 650px;
-    height: 620px;
+    width: 500px;
+    min-height: 440px;
+    max-height: 620px;
     padding: 10px;
     border-radius: 10px;
     color: rgb(243, 243, 243);
@@ -36,6 +37,7 @@ button {
     border-radius: 10px;
     outline: none;
     margin: 0 auto;
+    width: 120px;
 }
 
 button:hover {

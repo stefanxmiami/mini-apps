@@ -49,8 +49,7 @@ function Game() {
     }
 
     return (
-        <h1>asdfas</h1>
-        /*<div className="tic-tac-toe-game-full">
+        <div className="tic-tac-toe-game-full">
                 <div className="tic-tac-toe-game-board">
                     <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
                     <GameResult winner={result} onReset={handleReset}/>
@@ -58,7 +57,7 @@ function Game() {
             <div className="tic-tac-toe-game-info">
                 <ol>{moves}</ol>
             </div>
-        </div>*/
+        </div>
     );
 }
 

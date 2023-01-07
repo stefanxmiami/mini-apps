@@ -117,8 +117,9 @@ function Calculator(props) {
     const removeSpaces = (num) => num.toString().replace(/\s/g, "");
 
 
-    return (<Wrapper>
-        <h1>calc-co</h1>
+    return (
+        <Wrapper>
+            <h1>calc-co</h1>
             <Screen value={calc.num ? calc.num : calc.res}/>
             <ButtonBox>
                 {btnValues.flat().map((btn, i) => {
@@ -139,7 +140,8 @@ function Calculator(props) {
                     )
                 })}
             </ButtonBox>
-        </Wrapper>);
+        </Wrapper>
+    );
 }
 
 export default Calculator;

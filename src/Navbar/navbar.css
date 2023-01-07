@@ -1,44 +1,109 @@
-nav {
+.navbar {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    background-color: #333;
+    width: 100%;
+    height: 60px;
+    background-color: #202123;
     color: #fff;
-    padding: 20px;
 }
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 18px;
-    margin: 0 10px;
-}
-
-nav a:hover {
-    color: #ccc;
-}
-
-nav div {
+.navbar-left {
     display: flex;
     align-items: center;
 }
 
-nav div div {
-    /* Hide the menu by default */
-    display: none;
-    position: absolute;
-    background-color: #333;
-    color: #fff;
-    min-width: 150px;
-    z-index: 1;
-}
-
-nav div div.show {
-    /* Show the menu when the 'show' class is applied */
-    display: block;
-}
-
-nav div div a {
-    color: #fff;
+.navbar-left a {
+    display: flex;
+    align-items: center;
     text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    margin-left: 20px;
+}
+
+.navbar-left a:hover {
+    color: #eee;
+}
+
+.app-name {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-right .burger-menu {
+    display: none;
+    cursor: pointer;
+}
+
+.navbar-right .burger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px;
+}
+
+.navbar-right .menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 30%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-right .menu.active {
+    transform: translateX(0);
+}
+
+.navbar-right .menu li {
+    display: block;
+    width: 100%;
+}
+
+.navbar-right .menu li a {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    /*display: block;*/
+    width: 30%;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.nav-right {
+    display: flex;
+    padding: 10px 20px;
+    width: 30%;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.logo {
+    margin-left: 5px;
+    font-family: "Roboto Black";
+    letter-spacing: 0.05em;
+    font-size: 22px;
 }
