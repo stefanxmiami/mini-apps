@@ -319,6 +319,12 @@ const Game = ({rows, cols, mines, onNewGame}) => {
 
     const [board, setBoard] = useState(createBoard(rows, cols, mines));
 
+    const startNewGame = () => {
+        setGameState(GameStates.NEW_GAME);
+        setBoard(createBoard(rows, cols, mines));
+        setTimeElapsed(0);
+    };
+
     return (
         <div className="game">
             {gameState === GameStates.WON && (
@@ -330,7 +336,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
             {gameState === GameStates.LOST && (
                 <Modal>
                     <h1>You lost :(</h1>
-                    <button onClick={onNewGame}>New game</button>
+                    <button onClick={startNewGame}>New game</button>
                 </Modal>
             )}
             <Timer timeElapsed={timeElapsed}/>
