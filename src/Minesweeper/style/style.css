@@ -18,7 +18,7 @@
     display: flex;
     flex-wrap: wrap;
     border: 1px solid #ccc;
-    background-color: #eee;
+    background-color: #ddd;
 }
 
 .board-size-options {
@@ -29,31 +29,55 @@
 
 .board {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
     flex-wrap: wrap;
     width: 300px;
     height: 300px;
-    border: 1px solid #ccc;
-    background-color: #eee;
+    border: 3px solid #ccc;
+    background-color: #222;
+    margin-bottom: 20px;
 }
 
 .cell {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 30px;
     height: 30px;
     border: 1px solid #ccc;
-    background-color: #fff;
+    border-radius: 4px;
+    color: #222;
     cursor: pointer;
+    background-color: #ddd;
+    /* Add the following styles */
+    background-image: linear-gradient(to bottom right, #bbb, #eee);
+    box-shadow: inset 2px 2px 2px rgba(0, 0, 0, 0.2);
 }
 
 .cell.covered {
-    background-color: #ddd;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    background-image: none;
+    background-color: #444;
 }
 
 .cell.revealed {
-    background-color: #fff;
+    background-color: #777;
 }
 
 .cell.flagged {
-    background-color: #f00;
+    /*background-color: #f00;*/
 }
 
 .timer {
@@ -104,4 +128,25 @@
 
 .board-size-options button:active {
     background-color: #ccc;
+}
+
+.board-16x16 {
+    width: 530px;
+    display: flex;
+    flex-wrap: wrap;
+    height: 300px;
+    border: 1px solid #ccc;
+    background-color: #eee;
+}
+
+.board-30x16 {
+    width: 980px;
+}
+
+.cell.has-mine::before {
+    content: "\1F4A3"; /* bomb emoji */
+}
+
+.cell.flagged::before {
+    content: '🚩'; /* flag emoji */
 }

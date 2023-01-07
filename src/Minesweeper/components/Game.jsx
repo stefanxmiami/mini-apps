@@ -92,6 +92,15 @@ const Game = ({rows, cols, mines, onNewGame}) => {
         // Calculate the number of mines in each cell's neighbors
         calculateNumOfAdjacentMines(rows, cols, board);
 
+        const boardElement = document.querySelector('.board');
+        if (boardElement) {
+            if (board.length === 16) {
+                boardElement.classList.add('board-16x16');
+            } else if (board.length === 30) {
+                boardElement.classList.add('board-30x16');
+            }
+        }
+
         return board;
     };
 
@@ -99,6 +108,12 @@ const Game = ({rows, cols, mines, onNewGame}) => {
         if (board[row][col].state !== CELL_STATES.COVERED) {
             return;
         }
+
+        if (board[row][col].hasMine) {
+            // setGameState(GameStates.LOST);
+            return;
+        }
+
         board[row][col].state = CELL_STATES.REVEALED;
         if (board[row][col].numNeighboringMines === 0) {
             for (let ii = -1; ii <= 1; ii++) {
@@ -109,17 +124,76 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                     const rowToCheck = row + ii;
                     const colToCheck = col + jj;
                     if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
-                        revealCell(rowToCheck, colToCheck);
+                        if (board[rowToCheck][colToCheck].state === CELL_STATES.COVERED && !board[rowToCheck][colToCheck].hasMine) {
+                            revealCell(rowToCheck, colToCheck);
+                        }
                     }
                 }
             }
         }
+
+        if (!hasCoveredCells()) {
+            setGameState(GameStates.WON);
+        }
     };
 
+    function countFlaggedNeighbors(board, row, col) {
+        let flaggedCount = 0;
+        for (let ii = -1; ii <= 1; ii++) {
+            for (let jj = -1; jj <= 1; jj++) {
+                if (ii === 0 && jj === 0) {
+                    continue;
+                }
+                const rowToCheck = row + ii;
+                const colToCheck = col + jj;
+                if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
+                    if (board[rowToCheck][colToCheck].state === CELL_STATES.FLAGGED) {
+                        flaggedCount++;
+                    }
+                }
+            }
+        }
+        return flaggedCount;
+    }
+
+    function areFlaggedCellsMines(board, row, col) {
+        let flaggedCellsContainMines = true;
+        for (let ii = -1; ii <= 1; ii++) {
+            for (let jj = -1; jj <= 1; jj++) {
+                if (ii === 0 && jj === 0) {
+                    continue;
+                }
+                const rowToCheck = row + ii;
+                const colToCheck = col + jj;
+                if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
+                    if (board[rowToCheck][colToCheck].state === CELL_STATES.FLAGGED && !board[rowToCheck][colToCheck].hasMine) {
+                        flaggedCellsContainMines = false;
+                        break;
+                    }
+                }
+            }
+        }
+        return flaggedCellsContainMines;
+    }
+
     const handleCellClick = (row, col) => {
-        console.log(`Clicked on cell: ${row},${col}`);
+        console.log(`Clicked on ${board[row][col].state} cell: ${row},${col}`);
         if (board[row][col].state === CELL_STATES.FLAGGED) {
             return; // Disallow clicking on flagged cells
+        }
+
+        if (board[row][col].state === CELL_STATES.REVEALED && board[row][col].numNeighboringMines) {
+            console.log(`Clicked on ${board[row][col].state} cell: ${row},${col} value = ${board[row][col].numNeighboringMines}`);
+            console.log(`Clicked on ${board[row][col].state} cell: ${row},${col} flags = ${countFlaggedNeighbors(board, row, col)}`);
+            if (board[row][col].numNeighboringMines !== board[row][col].numFlaggedNeighbors) {
+                return; // Disallow clicking on numbered cells if there's an unequal number of flagged neighboring cells
+            } else {
+               if (areFlaggedCellsMines(board, row, col, countFlaggedNeighbors(board, row, col))) {
+                   console.log(board[row][col].numNeighboringMines !== board[row][col].numFlaggedNeighbors);
+               } else {
+                   setGameState(GameStates.LOST);
+               }
+            }
         }
 
         if (board[row][col].hasMine) {
@@ -150,67 +224,22 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                 } else {
                     // Otherwise, just reveal the clicked cell
                     board[row][col].state = CELL_STATES.REVEALED;
-                    expandEmptyCells(board, row, col)
+                    revealEmptyCells(board, row, col)
                 }
             }
 
-            if (allNeighboringBombsFlagged) {
-                // Reveal this cell and all of its neighboring cells
-                revealCurrentAndNeighboringCells();
-            } else {
-                board[row][col].state = CELL_STATES.REVEALED;
-            }
             setBoard([...board]);
         }
 
-        function revealCurrentAndNeighboringCells() {
-            board[row][col].state = CELL_STATES.REVEALED;
-            for (let ii = -1; ii <= 1; ii++) {
-                for (let jj = -1; jj <= 1; jj++) {
-                    if (ii === 0 && jj === 0) {
-                        continue;
-                    }
-                    const rowToCheck = row + ii;
-                    const colToCheck = col + jj;
-                    if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
-                        if (board[rowToCheck][colToCheck].state !== CELL_STATES.FLAGGED) {
-                            console.log(`cell: ${row},${col} is getting revealed`);
-                            board[rowToCheck][colToCheck].state = CELL_STATES.REVEALED;
-                        }
-                    }
-                }
-            }
-        }
         if (!hasCoveredCells()) {
             setGameState(GameStates.WON);
         }
     };
 
-    const expandEmptyCells = (board, row, col) => {
-        if (row < 0 || row >= rows || col < 0 || col >= cols) {
-            return;
-        }
-        if (board[row][col].state !== CELL_STATES.COVERED) {
-            return;
-        }
-        board[row][col].state = CELL_STATES.REVEALED;
-        if (board[row][col].numNeighboringMines > 0) {
-            return;
-        }
-
-        for (let ii = -1; ii <= 1; ii++) {
-            for (let jj = -1; jj <= 1; jj++) {
-                if (ii === 0 && jj === 0) {
-                    continue;
-                }
-                const rowToCheck = row + ii;
-                const colToCheck = col + jj;
-                expandEmptyCells(board, rowToCheck, colToCheck);
-            }
-        }
-    };
-
     const revealEmptyCells = (row, col) => {
+        /*if (board[row][col].numNeighboringMines > 0 && !areNeighboringCellsFlagged(board, row, col)) {
+            return;
+        }*/
         for (let ii = -1; ii <= 1; ii++) {
             for (let jj = -1; jj <= 1; jj++) {
                 if (ii === 0 && jj === 0) {
@@ -220,6 +249,24 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                 const colToCheck = col + jj;
                 if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
                     revealCell(rowToCheck, colToCheck);
+                }
+            }
+        }
+    };
+
+    function areNeighboringCellsFlagged(board, row, col, requiredFlaggedCount) {
+        let flaggedCount = 0;
+        for (let ii = -1; ii <= 1; ii++) {
+            for (let jj = -1; jj <= 1; jj++) {
+                if (ii === 0 && jj === 0) {
+                    continue;
+                }
+                const rowToCheck = row + ii;
+                const colToCheck = col + jj;
+                if (rowToCheck >= 0 && rowToCheck < rows && colToCheck >= 0 && colToCheck < cols) {
+                    if (board[rowToCheck][colToCheck].state === CELL_STATES.FLAGGED) {
+                        flaggedCount++;
+                    }
                 }
             }
         }

@@ -5,7 +5,7 @@ import '../style/style.css'
 
 const Board = ({ board, onCellClick, onCellRightClick, rows, cols }) => {
     return (
-        <div className="board"/* style={{ width: `${30 * cols}px`, height: `${30 * rows}px` }}*/>
+        <div className="board">
             {board.map((row, i) =>
                 row.map((cell, j) => (
                     <div

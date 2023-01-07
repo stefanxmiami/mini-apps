@@ -13,9 +13,9 @@ const BOARD_SIZES = [
         mines: 40,
     },
     {
-        rows: 16,
+        rows: 30,
         cols: 30,
-        mines: 99,
+        mines: 200,
     },
 ];
 
