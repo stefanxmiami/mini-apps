@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import Board from './Board';
 import GameResult from './GameResult';
+import Navbar from '../../Navbar/Navbar';
+import Menu from '../../Navbar/Menu';
 import calculateWinner from '../helpers/calculateWinner'
 
 function Game() {
@@ -48,7 +50,18 @@ function Game() {
         setCurrentMove(0);
     }
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleMenuClick = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
+        <>
+            <Navbar appName="Tic Tac Toe" handleMenuClick={handleMenuClick}/>
+            {
+                isMenuOpen && <Menu/>
+            }
         <div className="tic-tac-toe-game-full">
                 <div className="tic-tac-toe-game-board">
                     <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
@@ -58,6 +71,7 @@ function Game() {
                 <ol>{moves}</ol>
             </div>
         </div>
+        </>
     );
 }
 

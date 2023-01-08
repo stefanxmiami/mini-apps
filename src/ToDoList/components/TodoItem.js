@@ -60,8 +60,8 @@ const TodoItem = ({todo, toggleCompleted, deleteTodo, editTodo, updateTodo, edit
                         </div>
                     </div>
                     <div className='buttons'>
-                        <button onClick={editTodo}><FontAwesomeIcon icon={faPenToSquare}/> Edit</button>
-                        <button onClick={deleteTodo}><FontAwesomeIcon icon={faTrash}/> Delete</button>
+                        <button className="edit-button" onClick={editTodo}><FontAwesomeIcon icon={faPenToSquare}/> Edit</button>
+                        <button className="delete-button" onClick={deleteTodo}><FontAwesomeIcon icon={faTrash}/> Delete</button>
                     </div>
                 </>
             )}

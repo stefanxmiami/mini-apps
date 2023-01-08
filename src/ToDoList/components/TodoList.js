@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import TodoForm from './TodoForm';
 import TodoItem from './TodoItem';
+import Navbar from '../../Navbar/Navbar';
+import Menu from '../../Navbar/Menu';
 import '../style/item-style.css'
 
 const TodoList = () => {
@@ -42,7 +44,18 @@ const TodoList = () => {
         setEditing(null);
     }
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleMenuClick = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
+        <div className="todo-background">
+            <Navbar appName="To-Do List" handleMenuClick={handleMenuClick}/>
+            {
+                isMenuOpen && <Menu/>
+            }
         <div className="todo-list">
             <h1>To-Do List</h1>
             <TodoForm addTodo={addTodo} />
@@ -61,6 +74,7 @@ const TodoList = () => {
                     /></div>
                 ))}
             </ul>
+        </div>
         </div>
     );
 }

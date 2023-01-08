@@ -14,7 +14,7 @@ const CalculatorPage = () => {
 
     return (
         <>
-            <Navbar appName="Home" handleMenuClick={handleMenuClick}/>
+            <Navbar appName="Calc-co Calculator" handleMenuClick={handleMenuClick}/>
             {
                 isMenuOpen && <Menu/>
             }

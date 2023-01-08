@@ -1,11 +1,11 @@
 import './AnalogClock.css';
+import Navbar from '../Navbar/Navbar';
+import Menu from '../Navbar/Menu';
 import ram from './ram.png'
 
-// import PlayHeader from 'common/playlists/PlayHeader';
 import {useState, useEffect} from 'react';
 
 function AnalogClock(props) {
-    // Your Code Start below.
 
     const [date, setDate] = useState(new Date());
     useEffect(() => {
@@ -19,9 +19,20 @@ function AnalogClock(props) {
     const minute = date.getMinutes() * 6 + 180; // 360/60 = 6 each minutes it rotate 6deg + 180(same as above to ...see at 0 deg)
     const second = date.getSeconds() * 6 + 180; // // 360/60 = 6 each minutes it rotate 6deg + 180(look at 0 deg for more clarification)
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const handleMenuClick = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
+    document.body.style.overflow='hidden';
+
     return (
         <div className='clock-background'>
-            <img src={ram}/>
+            <Navbar appName="Hi-IQ Clock" handleMenuClick={handleMenuClick}/>
+            {
+                isMenuOpen && <Menu/>
+            }
             <div className='clock-container'>
                 <div className="analong-clock-container">
                     <div className="clock">
@@ -47,6 +58,7 @@ function AnalogClock(props) {
                     </div>
                 </div>
             </div>
+            <div className='pic'><img src={ram} alt=""/> </div>
         </div>
     );
 }

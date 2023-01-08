@@ -45,7 +45,7 @@ const MainMenu = () => {
     return (
         <div className="main-menu">
             {!showGame && (
-                <div>
+                <div className="contents">
                     <button onClick={() => startNewGame()}>New game</button>
                     <Options onChange={onBoardSizeChange} value={boardSizeIndex} />
                 </div>
