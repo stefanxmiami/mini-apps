@@ -22,7 +22,7 @@ const BOARD_SIZES = [
 const Options = ({ onChange, value }) => (
     <div>
         <label>
-            Board size:
+            <span className="options-label-text">Board size:</span>
             <select onChange={onChange} value={value}>
                 {BOARD_SIZES.map((size, i) => (
                     <option key={i} value={i}>

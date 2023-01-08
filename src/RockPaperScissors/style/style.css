@@ -58,21 +58,16 @@
 
 .player-choice,
 .computer-choice {
-    font-size: 1.5em;
-    margin: 10px 0;
+    font-size: 28px;
 }
 
 .player-choice {
-    background-color: blue;
-    color: white;
     font-weight: bold;
     padding: 10px;
     border-radius: 5px;
 }
 
 .computer-choice {
-    background-color: red;
-    color: white;
     font-weight: bold;
     padding: 10px;
     border-radius: 5px;
@@ -88,4 +83,11 @@ button {
     font-size: 1em;
     cursor: pointer;
     margin: 20px 0;
+}
+
+.play-again-button {
+    color: #fff;
+    font-size: 18px;
+    font-family: Roboto;
+    font-weight: bold;
 }

@@ -1,15 +1,16 @@
+.clock-background {
+    overflow-x: hidden;
+}
 .clock-background img {
     z-index: 0;
 }
-@media only screen and (min-width: 1300px) {
-    .clock-container {
-        background: url("ram.png") center;
-        background-repeat: no-repeat;
-        height: 100%;
-        /*background-position: -25% 60%;*/
-    }
+.pic img {
+    width: 700px;
+    top: -40%;
+    transform: translateY(-50%);
 }
 .clock {
+    //background: url("./ramportal.png") center no-repeat;
     z-index: 1;
     max-width: 375px;
     height: 375px;
@@ -20,8 +21,8 @@
     background-color: #3d3d3d;
     box-shadow: inset 0px 6px 0px 2px #646262, -4px 4px 1px 0px #959393, 0px 0px 1px 2px #959393,
     -4px 4px 7px 1px #434343;
-    top: 50%;
-    transform: translateY(40%);
+    top: 20%;
+    transform: translateY(10%);
 }
 .clock::after {
     content: '';
@@ -57,7 +58,7 @@
 .second-hand {
     width: 2px;
     height: 155px;
-    background: yellow;
+    background: #b7dff1;
     position: absolute;
     left: 50%;
     top: 50%;

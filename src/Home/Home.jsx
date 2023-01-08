@@ -18,6 +18,8 @@ const Home = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    document.body.style.overflow="hidden";
+
     return (
         <div className='home-background'>
             <Navbar appName="Home" handleMenuClick={handleMenuClick}/>

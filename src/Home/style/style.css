@@ -17,6 +17,7 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
     text-decoration: none;
+    border-radius: 5px;
 }
 
 .card:hover {
@@ -27,6 +28,7 @@ body {
     width: 200px;
     height: 200px;
     padding: 20px;
+    border-radius: 30px;
 }
 
 .card h3 {
@@ -48,7 +50,7 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin: 0 auto;
+    margin: -110px auto;
     max-width: 1024px;
     padding: 16px;
     transform: scale(0.75);
