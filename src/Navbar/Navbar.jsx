@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Link } from 'react-router-dom';
 import { faTrophy, faBars } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import './navbar.css';
 
 const Navbar = ({ appName, handleMenuClick }) => {

@@ -10,6 +10,9 @@ function Game() {
     const [currentMove, setCurrentMove] = useState(0);
     const xIsNext = currentMove % 2 === 0;
     const currentSquares = history[currentMove];
+    const [xWins, setXWins] = useState(0);
+    const [oWins, setOWins] = useState(0);
+    const [ties, setTies] = useState(0);
 
     function handlePlay(nextSquares) {
         const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
@@ -35,15 +38,33 @@ function Game() {
         );
     });
 
-    const winner = calculateWinner(currentSquares);
+    let winner = calculateWinner(currentSquares);
     let result;
-    if (winner) {
-        result = winner;
-    } else if (currentSquares.includes(null)) {
-        result = null;
-    } else {
-        result = 'T';
+
+    function play(choice) {
+        if (winner.valueOf() == 'X') {
+            console.log("x wins")
+        }
+        if (winner) {
+            result = winner;
+            console.log("winner: " + result.valueOf())
+            if (result.valueOf() == 'X') {
+                setXWins(xWins + 1);
+                console.log("X winner: " + result.valueOf())
+            }
+            if (result.valueOf() == 'O') {
+                setOWins(oWins + 1);
+
+            }
+        } else if (currentSquares.includes(null)) {
+            result = null;
+        } else {
+            result = 'T';
+            setTies(ties + 1);
+            console.log("tie!");
+        }
     }
+
 
     function handleReset() {
         setHistory([Array(9).fill(null)]);
@@ -62,15 +83,20 @@ function Game() {
             {
                 isMenuOpen && <Menu/>
             }
-        <div className="tic-tac-toe-game-full">
+            <div className="tic-tac-toe-game-full">
                 <div className="tic-tac-toe-game-board">
                     <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay}/>
                     <GameResult winner={result} onReset={handleReset}/>
                 </div>
-            <div className="tic-tac-toe-game-info">
-                <ol>{moves}</ol>
+                <div className="tic-tac-toe-game-info">
+                    <ol>{moves}</ol>
+                </div>
             </div>
-        </div>
+            <div className="scoreboard">
+                <div className="x-wins">X: {xWins}</div>
+                <div className="o-wins">O: {oWins}</div>
+                <div className="ties">Ties: {ties}</div>
+            </div>
         </>
     );
 }

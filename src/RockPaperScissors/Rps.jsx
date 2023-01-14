@@ -7,6 +7,9 @@ function Rps() {
     const [playerChoice, setPlayerChoice] = useState(null);
     const [computerChoice, setComputerChoice] = useState(null);
     const [result, setResult] = useState(null);
+    const [playerWins, setPlayerWins] = useState(0);
+    const [computerWins, setComputerWins] = useState(0);
+    const [ties, setTies] = useState(0);
 
     const choices = ['rock', 'paper', 'scissors'];
 
@@ -17,15 +20,23 @@ function Rps() {
 
         if (choice === computerChoice) {
             setResult('T');
+            setTies(ties + 1);
         } else if (
             (choice === 'rock' && computerChoice === 'scissors') ||
             (choice === 'paper' && computerChoice === 'rock') ||
             (choice === 'scissors' && computerChoice === 'paper')
         ) {
             setResult('W');
+            setPlayerWins(playerWins + 1);
         } else {
             setResult('L');
+            setComputerWins(computerWins + 1);
         }
+    }
+
+    function handlePlayAgain() {
+        setPlayerChoice(null);
+        setResult(null);
     }
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,7 +46,7 @@ function Rps() {
     };
 
     return (
-        <div className="rps-background">
+        <>
             <Navbar appName="Rock Paper Scissors" handleMenuClick={handleMenuClick}/>
             {
                 isMenuOpen && <Menu/>
@@ -53,16 +64,22 @@ function Rps() {
                         </button>
                     ))}
                 </div>
+
+                <div className="scoreboard">
+                    <div className="player-wins">Player wins: {playerWins}</div>
+                    <div className="computer-wins">Computer wins: {computerWins}</div>
+                    <div className="ties">Ties: {ties}</div>
+                </div>
+                <div className="player-choice">You chose: {playerChoice}</div>
+                <div className="computer-choice">Computer chose: {computerChoice}</div>
                 {result !== null && (
                     <div className="result">
                         {result === 'T' ? 'It\'s a tie!' : result === 'W' ? 'You win!' : 'You lose!'}
                     </div>
                 )}
-                <div className="player-choice">You chose: {playerChoice}</div>
-                <div className="computer-choice">Computer chose: {computerChoice}</div>
-                <button className="play-again-button" onClick={() => window.location.reload()}>Play again</button>
+                <button className="play-again-button" onClick={handlePlayAgain}>Play again</button>
             </div>
-        </div>
+        </>
     );
 }
 

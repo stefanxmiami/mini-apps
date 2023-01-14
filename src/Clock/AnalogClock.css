@@ -95,3 +95,14 @@
         height: 135px;
     }
 }
+
+@media screen and (max-width: 1000px) {
+    .pic img{
+        width: 300px;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .pic img{
+        width: 400px;
+    }
+}

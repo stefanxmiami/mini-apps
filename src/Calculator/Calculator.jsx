@@ -112,10 +112,14 @@ function Calculator(props) {
         });
     };
 
-    const toLocaleString = (num) =>
-        String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, "$1 ");
+    const toLocaleString = (num) => {
+        let maxDecimalPoints = 5;
+        let parts = num.toString().split('.');
+        let integerPart = parts[0];
+        let decimalPart = parts[1] ? parts[1].slice(0, maxDecimalPoints) : '';
+        return `${integerPart}${decimalPart !== "" ? "." + decimalPart : ""}`.toLocaleString();
+    }
     const removeSpaces = (num) => num.toString().replace(/\s/g, "");
-
 
     return (
         <Wrapper>

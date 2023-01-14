@@ -91,3 +91,32 @@ button {
     font-family: Roboto;
     font-weight: bold;
 }
+
+.scoreboard {
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
+}
+
+.player-wins {
+    padding: 10px;
+    font-weight: bold;
+    background-color: blue;
+    color: white;
+    border-radius: 10px;
+}
+
+.computer-wins {
+    padding: 10px;
+    font-weight: bold;
+    background-color: red;
+    color: white;
+    border-radius: 10px;
+}
+.ties {
+    padding: 10px;
+    font-weight: bold;
+    background-color: #333;
+    color: white;
+    border-radius: 10px;
+}

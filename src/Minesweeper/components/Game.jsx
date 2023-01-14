@@ -3,6 +3,7 @@ import Timer from './Timer';
 import FlagCounter from './FlagCounter';
 import Board from './Board';
 import Modal from './Modal';
+import LeaderboardModal from './LeaderboardModal';
 import '../style/style.css';
 import {CELL_STATES} from './CELL_STATES';
 
@@ -12,10 +13,11 @@ const GameStates = {
     LOST: 'lost',
 };
 
-const Game = ({rows, cols, mines, onNewGame}) => {
+const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
     const [gameState, setGameState] = useState(GameStates.IN_PROGRESS);
     const [timeElapsed, setTimeElapsed] = useState(0);
-
+    const [gameFinishedTime, setGameFinishedTime] = useState(0);
+    const [leaderboardModalIsOpen, setLeaderboardModalIsOpen] = useState(false);
     const [flagsRemaining, setFlagsRemaining] = useState(mines);
     const hasCoveredCells = () => {
         for (let i = 0; i < rows; i++) {
@@ -29,12 +31,18 @@ const Game = ({rows, cols, mines, onNewGame}) => {
     };
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setTimeElapsed((timeElapsed) => timeElapsed + 1);
-        }, 1000);
-
+        let intervalId;
+        if (gameState === GameStates.IN_PROGRESS) {
+            intervalId = setInterval(() => {
+                setTimeElapsed(timeElapsed => timeElapsed + 1);
+                setGameFinishedTime(gameFinishedTime => gameFinishedTime + 1);
+            }, 1000);
+        } else if (intervalId) {
+            // setGameFinishedTime(intervalId);
+            clearInterval(intervalId);
+        }
         return () => clearInterval(intervalId);
-    }, []);
+    }, [gameState, timeElapsed]);
 
     function calculateNumOfAdjacentMines(rows, cols, board) {
         for (let i = 0; i < rows; i++) {
@@ -133,6 +141,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
         }
 
         if (!hasCoveredCells()) {
+            setLeaderboardModalIsOpen(true);
             setGameState(GameStates.WON);
         }
     };
@@ -178,6 +187,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
 
     const handleCellClick = (row, col) => {
         console.log(`Clicked on ${board[row][col].state} cell: ${row},${col}`);
+
         if (board[row][col].state === CELL_STATES.FLAGGED) {
             return; // Disallow clicking on flagged cells
         }
@@ -219,6 +229,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                     revealCell(row, col);
                     revealEmptyCells(row, col);
                     if (!hasCoveredCells()) {
+                        setLeaderboardModalIsOpen(true);
                         setGameState(GameStates.WON);
                     }
                 } else {
@@ -227,11 +238,11 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                     revealEmptyCells(board, row, col)
                 }
             }
-
             setBoard([...board]);
         }
 
         if (!hasCoveredCells()) {
+            setLeaderboardModalIsOpen(true);
             setGameState(GameStates.WON);
         }
     };
@@ -313,6 +324,7 @@ const Game = ({rows, cols, mines, onNewGame}) => {
         }
         setBoard([...board]);
         if (!hasCoveredCells()) {
+            setLeaderboardModalIsOpen(true);
             setGameState(GameStates.WON);
         }
     };
@@ -320,23 +332,34 @@ const Game = ({rows, cols, mines, onNewGame}) => {
     const [board, setBoard] = useState(createBoard(rows, cols, mines));
 
     const startNewGame = () => {
-        setGameState(GameStates.NEW_GAME);
-        setBoard(createBoard(rows, cols, mines));
+        setGameState(GameStates.IN_PROGRESS);
         setTimeElapsed(0);
+        setGameFinishedTime(0);
+        setFlagsRemaining(mines);
+        setBoard(createBoard(rows, cols, mines));
     };
+
+    function handleNewGameClick() {
+        window.location.reload();
+    }
+
+    const handleCloseLeaderboardModal = () => {
+        setLeaderboardModalIsOpen(false);
+        // any other logic you want to handle here
+    }
 
     return (
         <div className="game">
             {gameState === GameStates.WON && (
-                <Modal>
-                    <h1>You won!</h1>
-                    <button onClick={startNewGame}>New game</button>
-                </Modal>
+                leaderboardModalIsOpen && (
+                <LeaderboardModal isOpen={leaderboardModalIsOpen} onClose={handleCloseLeaderboardModal} gameTime={gameFinishedTime} boardSize={board}/>
+                )
             )}
             {gameState === GameStates.LOST && (
                 <Modal>
                     <h1>You lost :(</h1>
-                    <button onClick={startNewGame}>New game</button>
+                    <button onClick={startNewGame}>Try again</button>
+                    <button onClick={handleNewGameClick}>Main Menu</button>
                 </Modal>
             )}
             <Timer timeElapsed={timeElapsed}/>
@@ -348,6 +371,9 @@ const Game = ({rows, cols, mines, onNewGame}) => {
                 onCellClick={handleCellClick}
                 onCellRightClick={handleCellRightClick}
             />
+            {gameState === GameStates.WON && (
+                <button className="new-game-btn" onClick={handleNewGameClick}>New Game</button>
+            )}
         </div>
     );
 }
