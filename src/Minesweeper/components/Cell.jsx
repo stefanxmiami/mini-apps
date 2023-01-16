@@ -5,6 +5,7 @@ const CELL_STATES = {
     COVERED: 'covered',
     REVEALED: 'revealed',
     FLAGGED: 'flagged',
+    BOMB_REVEALED: 'bomb-revealed',
 };
 
 const Cell = ({ row, col, state, onClick, onRightClick }) => {

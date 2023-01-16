@@ -12,7 +12,7 @@ const Navbar = ({ appName, handleMenuClick }) => {
             </Link>
             <div className="nav-center"><span className="app-name">{appName}</span></div>
             <div className="nav-right">
-                <FontAwesomeIcon icon={faBars} size='lg' onClick={handleMenuClick} />
+                <FontAwesomeIcon className="burger-menu" icon={faBars} size='lg' onClick={handleMenuClick} />
             </div>
         </nav>
     );

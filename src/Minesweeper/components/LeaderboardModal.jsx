@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import {Link} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faX } from '@fortawesome/free-solid-svg-icons';
+import { faX, faTrash } from '@fortawesome/free-solid-svg-icons';
 import {withRouter} from 'react-router-dom';
 
 const LeaderboardModal = ({isOpen, onClose, gameTime, boardSize}) => {
@@ -64,7 +64,10 @@ const LeaderboardModal = ({isOpen, onClose, gameTime, boardSize}) => {
                     </button>
                 </form>
                 <div className="leaderboard-modal-leaderboard">
-                    <h3>Leaderboard</h3>
+                    <div className="leaderboard-heading">
+                        <h3>Leaderboard </h3>
+                        <FontAwesomeIcon onClick={handleResetLeaderboard} className="fa-solid fa-x reset-leaderboard-btn" icon={faTrash}/>
+                    </div>
                     <ol className="leaderboard-modal-list">
                         {leaderboard.map((entry, index) => (
                             <li className="leaderboard-modal-list-item" key={index}>
@@ -74,10 +77,7 @@ const LeaderboardModal = ({isOpen, onClose, gameTime, boardSize}) => {
                     </ol>
                 </div>
             </div>
-            <div className="buttons">
-                <button className="new-game-btn" onClick={handleNewGameClick}>New Game</button>
-                <button className="reset-leaderboard" onClick={handleResetLeaderboard}>Reset</button>
-            </div>
+            <button className="new-game-btn" onClick={handleNewGameClick}>New Game</button>
         </div>
     );
 };

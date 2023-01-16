@@ -19,11 +19,11 @@ const Timer = ({ dueDate }) => {
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, [dueDate]);
+    }, []);
 
     return (
         <div>
-            {timeRemaining}
+            {timeRemaining && timeRemaining}
         </div>
     );
 }

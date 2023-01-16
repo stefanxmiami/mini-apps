@@ -25,7 +25,7 @@ const TodoItem = ({todo, toggleCompleted, deleteTodo, editTodo, updateTodo, edit
             }
         }, 1000);
         return () => clearInterval(interval);
-    }, []);
+    }, [dueDate]);
 
     const handleSubmit = (event) => {
         event.preventDefault();

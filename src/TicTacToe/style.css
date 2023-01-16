@@ -14,7 +14,7 @@
     list-style: none;
 }
 
-.tic-tac-toe-game-info li:first-child button{
+.tic-tac-toe-game-info li:first-child button {
     background-color: crimson;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .tic-tac-toe-game-full {
-    margin-top: 60px;
+    margin-top: 30px;
     display: flex;
 }
 
@@ -65,7 +65,7 @@
     border-radius: 10px;
     padding: 30px;
     margin-left: auto;
-    height: 520px;
+    height: 400px;
 }
 
 .square {
@@ -92,5 +92,63 @@
 }
 
 .tic-tac-toe-game-info {
+    top: -20%;
     margin-left: 20px;
+}
+
+.tic-tac-toe-game-info ol {
+    margin-top: 0;
+}
+
+.reset-button {
+    margin-top: 40px;
+}
+
+.ttt-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ttt-scoreboard {
+    margin-top: 20px;
+    display: flex;
+    background-color: #40424b;
+    align-items: center;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.x-wins {
+    font-family: Roboto;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-left: 20px;
+    background-color: red;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.o-wins {
+    font-family: Roboto;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: blue;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.ttt-ties {
+    font-family: Roboto;
+    font-size: 28px;
+    font-weight: bold;
+    margin-right: 20px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
 }

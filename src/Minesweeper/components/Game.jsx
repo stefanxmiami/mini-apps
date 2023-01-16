@@ -6,6 +6,9 @@ import Modal from './Modal';
 import LeaderboardModal from './LeaderboardModal';
 import '../style/style.css';
 import {CELL_STATES} from './CELL_STATES';
+import Confetti from 'react-confetti';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faX} from '@fortawesome/free-solid-svg-icons';
 
 const GameStates = {
     IN_PROGRESS: 'in_progress',
@@ -17,7 +20,8 @@ const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
     const [gameState, setGameState] = useState(GameStates.IN_PROGRESS);
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [gameFinishedTime, setGameFinishedTime] = useState(0);
-    const [leaderboardModalIsOpen, setLeaderboardModalIsOpen] = useState(false);
+    const [leaderboardModalIsOpen, setLeaderboardModalIsOpen] = useState(true);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
     const [flagsRemaining, setFlagsRemaining] = useState(mines);
     const hasCoveredCells = () => {
         for (let i = 0; i < rows; i++) {
@@ -185,8 +189,38 @@ const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
         return flaggedCellsContainMines;
     }
 
+    function revealAllBombs() {
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (board[i][j].hasMine) {
+                    board[i][j].state = CELL_STATES.BOMB_REVEALED;
+                    board[i][j].content = '💣';
+                }
+            }
+        }
+        setGameState(GameStates.LOST);
+    }
+
     const handleCellClick = (row, col) => {
         console.log(`Clicked on ${board[row][col].state} cell: ${row},${col}`);
+
+        if (gameState === GameStates.WON || gameState === GameStates.LOST) {
+            return;
+        }
+
+        if (timeElapsed === 0 && board[row][col].hasMine) {
+            // remove the mine from the cell
+            board[row][col].hasMine = false;
+            // place the mine somewhere else
+            let newRow, newCol;
+            do {
+                newRow = Math.floor(Math.random() * rows);
+                newCol = Math.floor(Math.random() * cols);
+            } while (board[newRow][newCol].hasMine);
+            board[newRow][newCol].hasMine = true;
+            // recalculate the number of adjacent mines for each cell
+            calculateNumOfAdjacentMines(rows, cols, board);
+        }
 
         if (board[row][col].state === CELL_STATES.FLAGGED) {
             return; // Disallow clicking on flagged cells
@@ -198,15 +232,19 @@ const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
             if (board[row][col].numNeighboringMines !== board[row][col].numFlaggedNeighbors) {
                 return; // Disallow clicking on numbered cells if there's an unequal number of flagged neighboring cells
             } else {
-               if (areFlaggedCellsMines(board, row, col, countFlaggedNeighbors(board, row, col))) {
-                   console.log(board[row][col].numNeighboringMines !== board[row][col].numFlaggedNeighbors);
-               } else {
-                   setGameState(GameStates.LOST);
-               }
+                if (areFlaggedCellsMines(board, row, col, countFlaggedNeighbors(board, row, col))) {
+                    console.log(board[row][col].numNeighboringMines !== board[row][col].numFlaggedNeighbors);
+                } else {
+                    revealAllBombs();
+                    setModalIsOpen(true);
+                    setGameState(GameStates.LOST);
+                }
             }
         }
 
         if (board[row][col].hasMine) {
+            revealAllBombs();
+            setModalIsOpen(true);
             setGameState(GameStates.LOST);
         } else {
             // Check if this cell has all of its neighboring bombs flagged
@@ -285,6 +323,11 @@ const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
 
     const handleCellRightClick = (row, col) => {
         console.log(`Right clicked on cell: ${row},${col}`);
+
+        if (gameState === GameStates.WON || gameState === GameStates.LOST) {
+            return;
+        }
+
         if (board[row][col].state === CELL_STATES.FLAGGED) {
             setFlagsRemaining(flagsRemaining + 1);
         }
@@ -348,22 +391,29 @@ const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
         // any other logic you want to handle here
     }
 
+    const handleCloseModal = () => {
+        setModalIsOpen(false);
+        // any other logic you want to handle here
+    }
+
     return (
-        <div className="game">
+        <div className="minesweeper-game">
+            {gameState === GameStates.WON && <Confetti isRunning={true}/>}
             {gameState === GameStates.WON && (
                 leaderboardModalIsOpen && (
-                <LeaderboardModal isOpen={leaderboardModalIsOpen} onClose={handleCloseLeaderboardModal} gameTime={gameFinishedTime} boardSize={board}/>
+                    <LeaderboardModal isOpen={leaderboardModalIsOpen} onClose={handleCloseLeaderboardModal}
+                                      gameTime={gameFinishedTime} boardSize={board}/>
                 )
             )}
             {gameState === GameStates.LOST && (
-                <Modal>
-                    <h1>You lost :(</h1>
-                    <button onClick={startNewGame}>Try again</button>
-                    <button onClick={handleNewGameClick}>Main Menu</button>
-                </Modal>
+                modalIsOpen && (
+                    <Modal isOpen={modalIsOpen} startNewGame={startNewGame} onClose={handleCloseModal}/>
+                )
             )}
-            <Timer timeElapsed={timeElapsed}/>
-            <FlagCounter flagsRemaining={flagsRemaining}/>
+            <div className="game-stats">
+                <Timer timeElapsed={timeElapsed}/>
+                <FlagCounter flagsRemaining={flagsRemaining}/>
+            </div>
             <Board
                 rows={rows}
                 cols={cols}
@@ -372,7 +422,16 @@ const Game = ({rows, cols, mines, onNewGame, leaderboard}) => {
                 onCellRightClick={handleCellRightClick}
             />
             {gameState === GameStates.WON && (
-                <button className="new-game-btn" onClick={handleNewGameClick}>New Game</button>
+                <div className="new-game-buttons">
+                    <button onClick={startNewGame}>Try again</button>
+                    <button className="new-game-btn" onClick={handleNewGameClick}>Main Menu</button>
+                </div>
+            )}
+            {gameState === GameStates.LOST && (
+                <div className="new-game-buttons">
+                    <button onClick={startNewGame}>Try again</button>
+                    <button className="new-game-btn" onClick={handleNewGameClick}>Main Menu</button>
+                </div>
             )}
         </div>
     );

@@ -7,7 +7,7 @@ function GameResult({ winner, onReset }) {
 
     return (
         <div className="tic-tac-toe-game-result">
-            <button onClick={onReset}>Reset</button>
+            <button className="reset-button" onClick={onReset}>Reset</button>
         </div>
     );
 }
